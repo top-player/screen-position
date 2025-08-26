@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>坐标转换计算器</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .example {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+        .calc {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .result {
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 4px;
+            color: #155724;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🎯 坐标转换逻辑说明</h1>
+        
+        <div class="example">
+            <h3>📱 使用场景</h3>
+            <p>您在<strong>2K或4K高分辨率屏幕</strong>上进行UI测试，但测试服务器环境是<strong>1080p分辨率</strong>。</p>
+            <p>插件帮您将高分辨率屏幕上的坐标转换为1080p服务器上对应的坐标。</p>
+        </div>
+
+        <div class="example">
+            <h3>🔢 2K屏幕 → 1080p服务器</h3>
+            <p><strong>屏幕分辨率：</strong>2560×1440 (2K)</p>
+            <p><strong>服务器分辨率：</strong>1920×1080 (1080p)</p>
+            <div class="calc">
+                缩放比例计算：
+                X轴: 1920 ÷ 2560 = 0.75
+                Y轴: 1080 ÷ 1440 = 0.75
+            </div>
+            <p><strong>示例：</strong>您在2K屏幕上点击坐标 (1280, 720)</p>
+            <div class="calc">
+                转换计算：
+                服务器X坐标 = 1280 × 0.75 = 960
+                服务器Y坐标 = 720 × 0.75 = 540
+            </div>
+            <div class="result">
+                ✅ 在1080p服务器上使用坐标：(960, 540)
+            </div>
+        </div>
+
+        <div class="example">
+            <h3>🔢 4K屏幕 → 1080p服务器</h3>
+            <p><strong>屏幕分辨率：</strong>3840×2160 (4K)</p>
+            <p><strong>服务器分辨率：</strong>1920×1080 (1080p)</p>
+            <div class="calc">
+                缩放比例计算：
+                X轴: 1920 ÷ 3840 = 0.5
+                Y轴: 1080 ÷ 2160 = 0.5
+            </div>
+            <p><strong>示例：</strong>您在4K屏幕上点击坐标 (1920, 1080)</p>
+            <div class="calc">
+                转换计算：
+                服务器X坐标 = 1920 × 0.5 = 960
+                服务器Y坐标 = 1080 × 0.5 = 540
+            </div>
+            <div class="result">
+                ✅ 在1080p服务器上使用坐标：(960, 540)
+            </div>
+        </div>
+
+        <div class="example">
+            <h3>🎯 插件使用步骤</h3>
+            <ol>
+                <li>打开Chrome扩展程序，加载坐标获取插件</li>
+                <li>点击插件图标，选择您的<strong>当前屏幕分辨率</strong></li>
+                <li>开启"实时坐标显示"</li>
+                <li>在页面上移动鼠标，右上角显示转换后的坐标</li>
+                <li>直接使用显示的坐标在1080p服务器环境中进行自动化测试</li>
+            </ol>
+        </div>
+
+        <div class="example">
+            <h3>💡 实际应用</h3>
+            <p><strong>问题：</strong>您使用Selenium等工具在1080p服务器上运行自动化测试，但您在2K/4K屏幕上获取的坐标在服务器上定位不准确。</p>
+            <p><strong>解决方案：</strong>使用此插件获取转换后的坐标，直接用于服务器环境，无需手动计算。</p>
+        </div>
+    </div>
+</body>
+</html>

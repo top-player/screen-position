@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>坐标测试页面 - 精确位置检测</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .info-panel {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .coordinate-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .coord-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .coord-item:hover {
+            border-color: #007bff;
+            transform: translateY(-2px);
+        }
+
+        .coord-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .coord-value {
+            font-size: 1.2rem;
+            font-family: 'Monaco', 'Consolas', monospace;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .test-areas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .test-area {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .test-area h3 {
+            color: #343a40;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .grid-area {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 5px;
+            height: 200px;
+        }
+
+        .grid-cell {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border: 1px solid #fff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: crosshair;
+            transition: all 0.2s ease;
+            font-size: 0.8rem;
+        }
+
+        .grid-cell:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .circle-area {
+            position: relative;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            cursor: crosshair;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .circle:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+
+        .circle.large {
+            width: 60px;
+            height: 60px;
+            background: #ff6b6b;
+        }
+
+        .circle.medium {
+            width: 40px;
+            height: 40px;
+            background: #4ecdc4;
+        }
+
+        .circle.small {
+            width: 25px;
+            height: 25px;
+            background: #feca57;
+            font-size: 0.7rem;
+        }
+
+        .button-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .test-button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-weight: 600;
+            cursor: crosshair;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .test-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            background: white;
+        }
+
+        .shape-area {
+            position: relative;
+            height: 200px;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .shape {
+            cursor: crosshair;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .shape:hover {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 45px solid #ff6b6b;
+        }
+
+        .square {
+            width: 50px;
+            height: 50px;
+            background: #4ecdc4;
+            border-radius: 8px;
+        }
+
+        .diamond {
+            width: 45px;
+            height: 45px;
+            background: #feca57;
+            transform: rotate(45deg);
+        }
+
+        .coordinates-log {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .coordinates-log h3 {
+            color: #343a40;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .log-entry {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+        }
+
+        .clear-log {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .clear-log:hover {
+            background: #c82333;
+        }
+
+        .cursor-tracker {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-tracker" id="cursorTracker">
+        坐标: (0, 0)
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🎯 坐标测试页面</h1>
+            <p>右键点击任意区域测试坐标获取插件 | 实时显示鼠标位置和点击记录</p>
+        </div>
+
+        <div class="info-panel">
+            <div class="coordinate-display">
+                <div class="coord-item">
+                    <div class="coord-label">当前鼠标位置</div>
+                    <div class="coord-value" id="currentCoords">(0, 0)</div>
+                </div>
+                <div class="coord-item">
+                    <div class="coord-label">最后点击位置</div>
+                    <div class="coord-value" id="lastClick">(未点击)</div>
+                </div>
+                <div class="coord-item">
+                    <div class="coord-label">点击元素</div>
+                    <div class="coord-value" id="clickedElement">无</div>
+                </div>
+                <div class="coord-item">
+                    <div class="coord-label">点击次数</div>
+                    <div class="coord-value" id="clickCount">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-areas">
+            <div class="test-area">
+                <h3>🔳 网格区域 (5×5)</h3>
+                <div class="grid-area" id="gridArea">
+                    <!-- 网格单元格将通过JavaScript生成 -->
+                </div>
+            </div>
+
+            <div class="test-area">
+                <h3>⭕ 圆形区域</h3>
+                <div class="circle-area" id="circleArea">
+                    <!-- 圆形元素将通过JavaScript生成 -->
+                </div>
+            </div>
+
+            <div class="test-area">
+                <h3>🔘 按钮区域</h3>
+                <div class="button-area">
+                    <button class="test-button">按钮A</button>
+                    <button class="test-button">按钮B</button>
+                    <button class="test-button">按钮C</button>
+                    <button class="test-button">按钮D</button>
+                    <button class="test-button">按钮E</button>
+                    <button class="test-button">按钮F</button>
+                </div>
+            </div>
+
+            <div class="test-area">
+                <h3>🔶 形状区域</h3>
+                <div class="shape-area">
+                    <div class="shape triangle" title="三角形"></div>
+                    <div class="shape square" title="正方形">□</div>
+                    <div class="shape diamond" title="菱形">◇</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="coordinates-log">
+            <h3>📝 点击坐标记录</h3>
+            <button class="clear-log" onclick="clearLog()">清空记录</button>
+            <div id="logContainer">
+                <div class="log-entry">等待点击事件...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let clickCount = 0;
+        const logContainer = document.getElementById('logContainer');
+        const currentCoordsEl = document.getElementById('currentCoords');
+        const lastClickEl = document.getElementById('lastClick');
+        const clickedElementEl = document.getElementById('clickedElement');
+        const clickCountEl = document.getElementById('clickCount');
+        const cursorTracker = document.getElementById('cursorTracker');
+
+        // 初始化页面
+        function initPage() {
+            generateGridCells();
+            generateCircles();
+            setupEventListeners();
+        }
+
+        // 生成网格单元格
+        function generateGridCells() {
+            const gridArea = document.getElementById('gridArea');
+            for (let i = 0; i < 25; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell';
+                cell.textContent = i + 1;
+                cell.dataset.cellId = i + 1;
+                gridArea.appendChild(cell);
+            }
+        }
+
+        // 生成圆形元素
+        function generateCircles() {
+            const circleArea = document.getElementById('circleArea');
+            const circles = [
+                { size: 'large', top: '20px', left: '30px', text: 'L1' },
+                { size: 'large', top: '80px', left: '200px', text: 'L2' },
+                { size: 'medium', top: '50px', left: '100px', text: 'M1' },
+                { size: 'medium', top: '120px', left: '50px', text: 'M2' },
+                { size: 'medium', top: '30px', left: '170px', text: 'M3' },
+                { size: 'small', top: '70px', left: '250px', text: 'S1' },
+                { size: 'small', top: '140px', left: '180px', text: 'S2' },
+                { size: 'small', top: '100px', left: '280px', text: 'S3' },
+                { size: 'small', top: '160px', left: '120px', text: 'S4' }
+            ];
+
+            circles.forEach(circle => {
+                const circleEl = document.createElement('div');
+                circleEl.className = `circle ${circle.size}`;
+                circleEl.style.top = circle.top;
+                circleEl.style.left = circle.left;
+                circleEl.textContent = circle.text;
+                circleEl.dataset.circleId = circle.text;
+                circleArea.appendChild(circleEl);
+            });
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 鼠标移动事件
+            document.addEventListener('mousemove', (e) => {
+                const x = e.pageX;
+                const y = e.pageY;
+                currentCoordsEl.textContent = `(${x}, ${y})`;
+                cursorTracker.textContent = `坐标: (${x}, ${y})`;
+            });
+
+            // 点击事件
+            document.addEventListener('click', (e) => {
+                handleClick(e);
+            });
+
+            // 右键点击事件（用于测试插件）
+            document.addEventListener('contextmenu', (e) => {
+                const x = e.pageX;
+                const y = e.pageY;
+                logCoordinates(x, y, '右键点击', getElementInfo(e.target));
+            });
+        }
+
+        // 处理点击事件
+        function handleClick(e) {
+            clickCount++;
+            const x = e.pageX;
+            const y = e.pageY;
+            const elementInfo = getElementInfo(e.target);
+            
+            lastClickEl.textContent = `(${x}, ${y})`;
+            clickedElementEl.textContent = elementInfo;
+            clickCountEl.textContent = clickCount;
+            
+            logCoordinates(x, y, '左键点击', elementInfo);
+        }
+
+        // 获取元素信息
+        function getElementInfo(element) {
+            let info = element.tagName.toLowerCase();
+            
+            if (element.id) {
+                info += `#${element.id}`;
+            }
+            
+            if (element.className) {
+                const classes = element.className.split(' ').filter(c => c.trim());
+                if (classes.length > 0) {
+                    info += `.${classes.join('.')}`;
+                }
+            }
+
+            // 添加特殊属性
+            if (element.dataset.cellId) {
+                info += ` [网格${element.dataset.cellId}]`;
+            }
+            
+            if (element.dataset.circleId) {
+                info += ` [圆形${element.dataset.circleId}]`;
+            }
+            
+            if (element.textContent && element.textContent.trim()) {
+                const text = element.textContent.trim().substring(0, 20);
+                info += ` "${text}"`;
+            }
+
+            return info;
+        }
+
+        // 记录坐标
+        function logCoordinates(x, y, type, elementInfo) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.innerHTML = `
+                <strong>${timestamp}</strong> - ${type}: (${x}, ${y})<br>
+                元素: ${elementInfo}
+            `;
+            
+            // 插入到容器顶部
+            if (logContainer.firstChild.textContent === '等待点击事件...') {
+                logContainer.innerHTML = '';
+            }
+            logContainer.insertBefore(logEntry, logContainer.firstChild);
+            
+            // 限制日志条目数量
+            while (logContainer.children.length > 20) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+        }
+
+        // 清空日志
+        function clearLog() {
+            logContainer.innerHTML = '<div class="log-entry">等待点击事件...</div>';
+            clickCount = 0;
+            clickCountEl.textContent = '0';
+            lastClickEl.textContent = '(未点击)';
+            clickedElementEl.textContent = '无';
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initPage);
+
+        // 添加一些有趣的交互效果
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'c' && e.ctrlKey) {
+                const coords = currentCoordsEl.textContent;
+                navigator.clipboard.writeText(coords).then(() => {
+                    alert(`当前坐标 ${coords} 已复制到剪贴板`);
+                }).catch(() => {
+                    console.log('复制失败');
+                });
+            }
+        });
+
+        // 添加键盘提示
+        console.log('💡 提示: 按 Ctrl+C 可以复制当前鼠标坐标');
+        console.log('🎯 使用坐标获取插件右键点击任意位置测试功能');
+    </script>
+</body>
+</html>

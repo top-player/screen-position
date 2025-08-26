@@ -1,0 +1,116 @@
+/* styles.css - 通用样式文件 */
+
+/* 坐标提示框样式 */
+#coordinate-tooltip {
+  position: absolute !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  color: white !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace !important;
+  z-index: 2147483647 !important;
+  pointer-events: none !important;
+  white-space: nowrap !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 通知样式 */
+#coordinate-notification {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  padding: 12px 20px !important;
+  border-radius: 6px !important;
+  font-size: 14px !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+  z-index: 2147483646 !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+  backdrop-filter: blur(8px) !important;
+  max-width: 300px !important;
+  word-wrap: break-word !important;
+}
+
+/* 十字线样式 */
+#coordinate-crosshair {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 2147483645 !important;
+}
+
+#coordinate-crosshair > div:first-child {
+  position: absolute !important;
+  width: 1px !important;
+  height: 100vh !important;
+  background: #ff4444 !important;
+  opacity: 0.7 !important;
+  box-shadow: 0 0 2px rgba(255, 68, 68, 0.5) !important;
+}
+
+#coordinate-crosshair > div:last-child {
+  position: absolute !important;
+  width: 100vw !important;
+  height: 1px !important;
+  background: #ff4444 !important;
+  opacity: 0.7 !important;
+  box-shadow: 0 0 2px rgba(255, 68, 68, 0.5) !important;
+}
+
+/* 动画定义 */
+@keyframes coordinate-fadeOut {
+  0% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+  80% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+  100% { 
+    opacity: 0; 
+    transform: translateY(-10px) scale(0.95); 
+  }
+}
+
+@keyframes coordinate-slideIn {
+  from { 
+    transform: translateX(100%) scale(0.9); 
+    opacity: 0; 
+  }
+  to { 
+    transform: translateX(0) scale(1); 
+    opacity: 1; 
+  }
+}
+
+@keyframes coordinate-slideOut {
+  from { 
+    transform: translateX(0) scale(1); 
+    opacity: 1; 
+  }
+  to { 
+    transform: translateX(100%) scale(0.9); 
+    opacity: 0; 
+  }
+}
+
+/* 确保样式优先级 */
+body #coordinate-tooltip,
+body #coordinate-notification,
+body #coordinate-crosshair {
+  all: unset;
+}
+
+/* 防止与页面样式冲突 */
+#coordinate-tooltip * {
+  all: unset;
+}
+
+#coordinate-notification * {
+  all: unset;
+}

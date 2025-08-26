@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>图标生成器</title>
+</head>
+<body>
+    <canvas id="canvas" width="128" height="128" style="border: 1px solid #ccc;"></canvas>
+    <br><br>
+    <button onclick="downloadIcon(16)">下载 16x16</button>
+    <button onclick="downloadIcon(32)">下载 32x32</button>
+    <button onclick="downloadIcon(48)">下载 48x48</button>
+    <button onclick="downloadIcon(128)">下载 128x128</button>
+
+    <script>
+        function drawIcon(size) {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // 设置画布大小
+            canvas.width = size;
+            canvas.height = size;
+            
+            // 清除画布
+            ctx.clearRect(0, 0, size, size);
+            
+            // 绘制背景
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#4CAF50');
+            gradient.addColorStop(1, '#2E7D32');
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // 绘制十字线
+            const lineWidth = Math.max(2, size / 32);
+            const center = size / 2;
+            
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = lineWidth;
+            ctx.lineCap = 'round';
+            
+            // 垂直线
+            ctx.beginPath();
+            ctx.moveTo(center, size * 0.2);
+            ctx.lineTo(center, size * 0.8);
+            ctx.stroke();
+            
+            // 水平线
+            ctx.beginPath();
+            ctx.moveTo(size * 0.2, center);
+            ctx.lineTo(size * 0.8, center);
+            ctx.stroke();
+            
+            // 绘制中心圆点
+            const dotRadius = Math.max(2, size / 24);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(center, center, dotRadius, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // 绘制角落标记
+            const cornerSize = size * 0.15;
+            const cornerOffset = size * 0.1;
+            
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = Math.max(1, size / 64);
+            
+            // 左上角
+            ctx.beginPath();
+            ctx.moveTo(cornerOffset, cornerOffset + cornerSize);
+            ctx.lineTo(cornerOffset, cornerOffset);
+            ctx.lineTo(cornerOffset + cornerSize, cornerOffset);
+            ctx.stroke();
+            
+            // 右上角
+            ctx.beginPath();
+            ctx.moveTo(size - cornerOffset - cornerSize, cornerOffset);
+            ctx.lineTo(size - cornerOffset, cornerOffset);
+            ctx.lineTo(size - cornerOffset, cornerOffset + cornerSize);
+            ctx.stroke();
+            
+            // 左下角
+            ctx.beginPath();
+            ctx.moveTo(cornerOffset, size - cornerOffset - cornerSize);
+            ctx.lineTo(cornerOffset, size - cornerOffset);
+            ctx.lineTo(cornerOffset + cornerSize, size - cornerOffset);
+            ctx.stroke();
+            
+            // 右下角
+            ctx.beginPath();
+            ctx.moveTo(size - cornerOffset - cornerSize, size - cornerOffset);
+            ctx.lineTo(size - cornerOffset, size - cornerOffset);
+            ctx.lineTo(size - cornerOffset, size - cornerOffset - cornerSize);
+            ctx.stroke();
+        }
+        
+        function downloadIcon(size) {
+            drawIcon(size);
+            
+            const canvas = document.getElementById('canvas');
+            const link = document.createElement('a');
+            link.download = `icon${size}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+        
+        // 初始绘制128x128图标
+        drawIcon(128);
+    </script>
+</body>
+</html>

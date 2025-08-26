@@ -1,0 +1,31 @@
+<svg width="128" height="128" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2E7D32;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="128" height="128" fill="url(#bg)" rx="16" ry="16"/>
+  
+  <!-- 十字线 -->
+  <line x1="64" y1="25" x2="64" y2="103" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <line x1="25" y1="64" x2="103" y2="64" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- 中心圆点 -->
+  <circle cx="64" cy="64" r="5" fill="white"/>
+  
+  <!-- 角落标记 -->
+  <!-- 左上角 -->
+  <path d="M 16 32 L 16 16 L 32 16" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- 右上角 -->
+  <path d="M 96 16 L 112 16 L 112 32" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- 左下角 -->
+  <path d="M 16 96 L 16 112 L 32 112" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- 右下角 -->
+  <path d="M 96 112 L 112 112 L 112 96" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>坐标获取插件</title>
+    <style>
+        body {
+            width: 280px;
+            min-height: 150px;
+            margin: 0;
+            padding: 16px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #333;
+        }
+        
+        .button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: #4CAF50;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-weight: 500;
+        }
+        
+        .button:hover {
+            background: #45a049;
+        }
+        
+        .select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+            margin-bottom: 8px;
+        }
+        
+        .select:hover {
+            border-color: #4CAF50;
+        }
+        
+        .select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        .resolution-info {
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+        
+        .instructions {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+            margin-top: 12px;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 8px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            font-size: 12px;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="title">坐标获取插件</div>
+        <div class="subtitle">实时坐标显示控制</div>
+    </div>
+    
+    <div id="status" class="status" style="display: none;"></div>
+    
+    <div class="section">
+        <div class="section-title">🎯 实时坐标显示</div>
+        <button id="toggleCoordinateDisplay" class="button">开启实时坐标显示</button>
+        <div class="instructions">
+            在页面右上角实时显示鼠标坐标位置，方便连续监控。
+        </div>
+    </div>
+    
+    <div class="section">
+        <div class="section-title">📺 屏幕分辨率设置</div>
+        <select id="resolutionSelect" class="select">
+            <option value="1920x1080">🎥 1920x1080 (1080p) - 当前屏幕</option>
+            <option value="2560x1440">🎆 2560x1440 (2K) - 当前屏幕</option>
+            <option value="3840x2160">✨ 3840x2160 (4K) - 当前屏幕</option>
+        </select>
+        <div class="resolution-info" id="resolutionInfo">
+            当前屏幕分辨率：1920x1080，无需转换
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

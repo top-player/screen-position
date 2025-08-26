@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>坐标验证测试</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: monospace;
+            background: #f0f0f0;
+        }
+        
+        .test-box {
+            width: 200px;
+            height: 200px;
+            background: #4CAF50;
+            margin: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            cursor: crosshair;
+        }
+        
+        .info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .scroll-area {
+            height: 2000px;
+            background: linear-gradient(to bottom, #ff9a9e, #fecfef);
+            margin-top: 20px;
+            padding: 20px;
+        }
+        
+        .marker {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: red;
+            border-radius: 50%;
+            transform: translate(-5px, -5px);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="info" id="info">
+        鼠标坐标: (0, 0)<br>
+        页面滚动: (0, 0)<br>
+        客户端坐标: (0, 0)
+    </div>
+    
+    <h1>坐标验证测试页面</h1>
+    <p>右键点击任意位置获取坐标，对比实时显示的坐标值是否一致</p>
+    
+    <div class="test-box" id="testBox">
+        测试区域<br>
+        点击获取坐标
+    </div>
+    
+    <div class="scroll-area">
+        <h2>滚动测试区域</h2>
+        <p>向下滚动页面，然后右键点击测试坐标的准确性</p>
+        <div style="height: 500px; background: rgba(255,255,255,0.5); margin: 20px 0; padding: 20px;">
+            <h3>滚动后的测试区域</h3>
+            <p>在这里右键点击，验证滚动状态下坐标的准确性</p>
+        </div>
+    </div>
+
+    <script>
+        const info = document.getElementById('info');
+        let markers = [];
+        
+        // 监听鼠标移动
+        document.addEventListener('mousemove', (e) => {
+            const pageX = e.pageX;
+            const pageY = e.pageY;
+            const clientX = e.clientX;
+            const clientY = e.clientY;
+            const scrollX = window.pageXOffset;
+            const scrollY = window.pageYOffset;
+            
+            info.innerHTML = `
+                鼠标坐标: (${pageX}, ${pageY})<br>
+                页面滚动: (${scrollX}, ${scrollY})<br>
+                客户端坐标: (${clientX}, ${clientY})
+            `;
+        });
+        
+        // 监听右键点击
+        document.addEventListener('contextmenu', (e) => {
+            // 清除之前的标记
+            markers.forEach(marker => {
+                if (marker.parentNode) {
+                    marker.parentNode.removeChild(marker);
+                }
+            });
+            markers = [];
+            
+            // 创建新标记
+            const marker = document.createElement('div');
+            marker.className = 'marker';
+            marker.style.left = e.pageX + 'px';
+            marker.style.top = e.pageY + 'px';
+            marker.title = `坐标: (${e.pageX}, ${e.pageY})`;
+            
+            document.body.appendChild(marker);
+            markers.push(marker);
+            
+            console.log(`右键点击坐标: (${e.pageX}, ${e.pageY})`);
+            console.log(`客户端坐标: (${e.clientX}, ${e.clientY})`);
+            console.log(`页面滚动: (${window.pageXOffset}, ${window.pageYOffset})`);
+        });
+        
+        // 防止默认右键菜单（除了插件菜单）
+        document.addEventListener('contextmenu', (e) => {
+            // 让插件菜单正常显示，不阻止默认行为
+        });
+        
+        console.log('坐标验证测试页面已加载');
+        console.log('使用方式：');
+        console.log('1. 观察实时坐标显示（如果已开启）');
+        console.log('2. 右键点击获取坐标');
+        console.log('3. 对比两个坐标值是否一致');
+    </script>
+</body>
+</html>
